@@ -5,6 +5,7 @@
     --main-bg: #007579;
     --main-txt:#C0A77E;
     --all-bg: #fff;
+    --ptext: #000;
 
 }
 
@@ -39,7 +40,8 @@ h3 {
 
 a {
 
-    color: #000;
+    color: var(--ptext);
+    font-weight: bold;
 }
 
 input {
@@ -114,6 +116,8 @@ input:hover {
 .dark-mode {
 
     --all-bg: #000;
+    --ptext: #fff;
+    
 
 }
 
@@ -141,6 +145,11 @@ input:hover {
     width:100%;
     position:absolute;
 
+}
+
+.infotext {
+
+    color: var(--ptext)
 }
  
 @media (max-width: 900px) {
