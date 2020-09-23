@@ -1,0 +1,184 @@
+@import url("https://fonts.googleapis.com/css?family=Open+Sans:400,600,700&display=swap");
+
+:root {
+
+    --main-bg: #007579;
+    --main-txt:#C0A77E;
+    --all-bg: #fff;
+
+}
+
+body {
+
+    margin: 0;
+    padding: 0;
+    font-family: "Open Sans", sans-serif;
+    background: var(--all-bg);
+
+}
+
+img {
+
+    width: 500px;
+
+}
+
+h2 {
+
+    font-style: oblique;
+
+}
+
+h3 {
+
+    padding-top: 30px;
+    padding-bottom: 30px;
+    font-size: 50px;
+    text-align: center;
+}
+
+a {
+
+    color: #000;
+}
+
+input {
+
+    width: 50px;
+    border-width: 0;
+    margin-top: 1%;
+    margin-left: 50%;
+    transition: transform 0.3s ease-in-out;
+
+}
+
+input:hover {
+
+    transform: rotate(180deg);
+    transition: transform 0.3s ease-in-out;
+
+}
+
+.title {
+
+    background-color: var(--main-bg);
+    color: var(--main-txt);
+    width: 100%;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 0;
+
+}
+
+.container {
+
+    width: 800px;
+    margin: 50px auto 0;
+    display: table;
+    box-sizing: border-box;
+
+}
+
+.row {
+
+    margin: 10px 0;
+
+}
+
+.column {
+
+    background: var(--main-bg);
+    color: var(--main-txt);
+    display:table-cell;
+    padding: 30px;
+    width: 33.333%;
+    text-align: center;
+    vertical-align: middle;
+    border-right: 10px solid var(--all-bg);
+
+}
+
+.column1 {
+
+    background: var(--all-bg);
+    color: var(--main-bg);
+    display:table-cell;
+    padding: 30px;
+    width: 33.333%;
+    text-align: center;
+    vertical-align: middle;
+    border-right: 10px solid var(--all-bg);
+
+}
+
+.dark-mode {
+
+    --all-bg: #000;
+
+}
+
+.map {
+
+    margin: auto;
+    width: 35.1%;
+
+}
+
+.map-responsive{
+ 
+    overflow:hidden;
+    padding-bottom:56.25%;
+    position:relative;
+    height:0;
+
+}
+ 
+.map-responsive iframe{
+
+    left:0;
+    top:0;
+    height:100%;
+    width:100%;
+    position:absolute;
+
+}
+ 
+@media (max-width: 900px) {
+
+    .container {
+
+        margin: 0;
+        padding: 10px;
+        width: 100%;
+        
+    }
+
+    .column {
+
+        width: 100%;
+        display: block;
+        margin: 10px 0;
+    }
+
+    .row {
+
+        margin: 0;
+    }
+}
+
+
+::-webkit-scrollbar {
+    width: 20px;
+  }
+  
+::-webkit-scrollbar-track {
+
+    box-shadow: inset 0 0 5px grey;
+
+  }
+  
+::-webkit-scrollbar-thumb {
+
+    background: var(--main-bg);
+
+  }
