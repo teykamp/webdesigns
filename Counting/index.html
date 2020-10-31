@@ -1,0 +1,93 @@
+<!DOCTYPE HTML>
+<link rel="stylesheet" href="style.css">
+<html>
+<head>
+<script>
+window.onload = function () {
+
+var dpts = []; // dataPoints
+var chart = new CanvasJS.Chart("chartContainer", {
+	animationEnabled: true,  
+	title:{	
+	},
+
+	axisX:{
+    gridThickness: 0,
+    tickLength: 0,
+    lineThickness: 0,
+    labelFormatter: function(){
+      return " ";
+    }
+  },
+
+    axisY:{
+    gridThickness: 0,
+    tickLength: 0,
+    lineThickness: 0,
+    labelFormatter: function(){
+      return " ";
+    }
+  },
+
+	data: [{
+		type: "splineArea",
+		color: "rgba(54,158,173,.7)", // chart color
+		markerSize: 0,
+		dataPoints: dpts
+	}]
+	});
+
+var xVal = 0;
+var yVal = 100; 
+var updateInterval = 5000;
+var dataLength = 10;
+
+var updateChart = function (count) {
+
+	count = count || 1;
+
+	for (var j = 0; j < count; j++) {
+		var change = Math.round(5 + Math.random() * (-10))
+		yVal = yVal + change;
+
+		if (yVal < 0) {
+			yVal = 0;
+		}
+
+		// document.getElementById("numDisplay").innerHTML = yVal;
+		bezier_count(numDisplay, yVal, 3000, 0.02, .99, .99, 0.01);
+
+		dpts.push({
+			x: xVal,
+			y: yVal
+		});
+		xVal++;
+        dataLength++;
+	}
+
+	if (dpts.length > dataLength) {
+		dpts.shift();
+	}
+
+	chart.render();
+};
+
+updateChart(dataLength);
+setInterval(function(){updateChart()}, updateInterval);
+
+
+
+}
+
+// Var element_to_change = Document.getelementbyid(“idofelemenyyouwanttochange”);
+// Element.innerhtml = “text you want to change to”
+
+</script>
+</head>
+<body>
+	<div id="chartContainer" style="width:50%; height:140px"></div> 
+	<div class="box">"The value for number is: " <span id="numDisplay"></span></div>
+	<script defer src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>
+	<script defer src="./bezier_counter.js"></script>
+</body>
+</html>
