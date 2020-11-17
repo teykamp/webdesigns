@@ -1,3 +1,5 @@
+//cvega15 @ github
+
 class cubic_bezier {
     constructor(p0_x, p0_y, p1_x, p1_y, p2_x, p2_y, p3_x, p3_y) {
         this.p0_x = p0_x;
@@ -10,7 +12,7 @@ class cubic_bezier {
         this.p3_y = p3_y;
     };
 
-    get_coordinates(t) {
+    get_coordinates(t){
         console.log('logged')
         return {x: "x", y: "y"};
     };
@@ -24,32 +26,43 @@ class cubic_bezier {
     };
 };
 
-function bezier_counter(element, timestamp, duration, number, animation_bezier) {
+// bezier_counter - special increment function that outputs a linear interpolation between two numbers over time.
+// element -
+// timestamp -
+// duration -
+// start_number - the initial value to count from
+// end_number - the final value to reach within the time constraint
+// animation_bezier -
+function bezier_counter(timestamp, start_time, element, duration, start_number, end_number, animation_bezier) {
+    var progress = timestamp - start_time;
 
-    var bezier_y = animation_bezier.get_y(timestamp/duration) * number;
+    //var bezier_y = animation_bezier.get_y(timestamp/duration) * end_number;
+    var bezier_y = animation_bezier.get_y(progress / duration) * (end_number - start_number) + start_number;
     element.innerHTML = Math.floor(bezier_y);
 
     //check to see if function finished execution
-    if (timestamp < duration) {
+    if(progress < duration) {
         requestAnimationFrame(function(timestamp) {
-            bezier_counter(element, timestamp, duration, number, animation_bezier);
+            bezier_counter(timestamp, start_time, element, duration, start_number, end_number, animation_bezier);
         });
     } else {
-        //change to the users number at the end in case something went wrong
-        element.innerHTML = number;
+        //change to the users end_number at the end in case something went wrong
+        element.innerHTML = end_number;
     };
 };
 
-function bezier_count(element_id, end_number, animation_duration, p1_x=null, p1_y=null, p2_x=null, p2_y=null) {
+function bezier_animation(element_id, start_number=0, end_number, animation_duration, p1_x=null, p1_y=null, p2_x=null, p2_y=null) {
+
     //set default coordinates
     var p1 = {p1_x: .01, p1_y: 1};
     var p2 = {p2_x: .01, p2_y: 1};
 
     //if the user inputted bezier coordinates then check to make sure they are in range, if so then change the default coordinates to the user coordinates
-    if (p1_x && p1_y && p2_x && p2_y) {
-        if (p1_x > 1 || p1_x < 0 || p2_x > 1 || p2_x < 0) {
+    if(p1_x && p1_y && p2_x && p2_y) {
+        if(p1_x > 1 || p1_x < 0 || p2_x > 1 || p2_x < 0) {
             throw "p1_x and p2_x have to be between 1 and 0, please check you got this right";
         } else {
+            console.log('using customs')
             p1 = {p1_x: p1_x, p1_y: p1_y};
             p2 = {p2_x: p2_x, p2_y: p2_y};
         };
@@ -63,8 +76,9 @@ function bezier_count(element_id, end_number, animation_duration, p1_x=null, p1_
 
     //start animation
     requestAnimationFrame(function(timestamp) {
-        bezier_counter(element_id, timestamp, animation_duration, end_number, animation_bezier);
+        var start_time = timestamp;
+        bezier_counter(timestamp, start_time, element_id, animation_duration, start_number, end_number, animation_bezier)
     });
 };
 
-//export {bezier_count};
+//export {bezier_animation};
