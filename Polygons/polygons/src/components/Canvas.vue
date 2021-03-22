@@ -58,14 +58,14 @@ export default {
     ptsList.push(b3);
     const b4 = new Ball(randomNumber(0,canvas.width), randomNumber(0,canvas.height), randomNumber(-.5, .5), randomNumber(-.5, .5));
     ptsList.push(b4);
-    const b5 = new Ball(randomNumber(0,canvas.width), randomNumber(0,canvas.height), randomNumber(-.5, .5), randomNumber(-.5, .5));
-    ptsList.push(b5);
-    const b6 = new Ball(randomNumber(0,canvas.width), randomNumber(0,canvas.height), randomNumber(-.5, .5), randomNumber(-.5, .5));
-    ptsList.push(b6);
-    const b7 = new Ball(randomNumber(0,canvas.width), randomNumber(0,canvas.height), randomNumber(-.5, .5), randomNumber(-.5, .5));
-    ptsList.push(b7);
-    const b8 = new Ball(randomNumber(0,canvas.width), randomNumber(0,canvas.height), randomNumber(-.5, .5), randomNumber(-.5, .5));
-    ptsList.push(b8);
+    const br = new Ball(canvas.width, canvas.height, 0, 0);
+    ptsList.push(br);
+    const bl = new Ball(0, canvas.height, 0, 0);
+    ptsList.push(bl);
+    const tr = new Ball(canvas.width, 0, 0, 0);
+    ptsList.push(tr);
+    const tl = new Ball(0, 0, 0, 0);
+    ptsList.push(tl);
 
     function drawPolygon(obj1, obj2, obj3) {
       ctx.fillStyle = '#000';
@@ -82,8 +82,8 @@ export default {
       // defaults (TODO: Find way to not need obj defaults)
       var minDist = 99999999999999;
       var minDist2 = 99999999999999;
-      var minObj = objList[0];
-      var minObj2 = objList[0];
+      var minObj = objList[1];
+      var minObj2 = objList[2];
 
       for (var i=0; i < objList.length; i++) {
         for (var j=0; j < objList.length; j++) {
@@ -114,14 +114,9 @@ export default {
     
     function draw() {
         ctx.clearRect(0, 0, canvas.width, canvas.height);
-        b1.drawBall();
-        b2.drawBall();
-        b3.drawBall();
-        b4.drawBall();
-        b5.drawBall();
-        b6.drawBall();
-        b7.drawBall();
-        b8.drawBall();
+        for (var i=0; i < ptsList.length; i++) {
+          ptsList[i].drawBall();
+        }
         findClosest(ptsList);
         // drawPolygon(b1, b2, b3);
     }
