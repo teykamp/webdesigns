@@ -82,8 +82,8 @@ export default {
       // defaults (TODO: Find way to not need obj defaults)
       var minDist = 99999999999999;
       var minDist2 = 99999999999999;
-      var minObj = objList[1];
-      var minObj2 = objList[2];
+      var minObj = objList[0];
+      var minObj2 = objList[0];
 
       for (var i=0; i < objList.length; i++) {
         for (var j=0; j < objList.length; j++) {
