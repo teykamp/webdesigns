@@ -5,6 +5,8 @@
 </template>
 
 <script>
+import Delaunator from 'delaunator';
+
 export default {
   data() {
     return {
@@ -23,6 +25,8 @@ export default {
     canvas.width = window.innerWidth-20;
     const ballRadius = 5;
     var ptsList = [];
+    var coordsList = [];
+    // const filllist = ['#f00', '#0f0', '#00f', '#f0f'];
 
 
     class Ball {
@@ -51,74 +55,78 @@ export default {
       }
     }
     const b1 = new Ball(randomNumber(0,canvas.width), randomNumber(0,canvas.height), randomNumber(-.5, .5), randomNumber(-.5, .5));
+    coordsList.push([b1.x, b1.y]);
     ptsList.push(b1);
     const b2 = new Ball(randomNumber(0,canvas.width), randomNumber(0,canvas.height), randomNumber(-.5, .5), randomNumber(-.5, .5));
+    coordsList.push([b2.x, b2.y]);
     ptsList.push(b2);
     const b3 = new Ball(randomNumber(0,canvas.width), randomNumber(0,canvas.height), randomNumber(-.5, .5), randomNumber(-.5, .5));
+    coordsList.push([b3.x, b3.y]);
     ptsList.push(b3);
     const b4 = new Ball(randomNumber(0,canvas.width), randomNumber(0,canvas.height), randomNumber(-.5, .5), randomNumber(-.5, .5));
+    coordsList.push([b4.x, b4.y]);
     ptsList.push(b4);
+
+    // Corners
     const br = new Ball(canvas.width, canvas.height, 0, 0);
+    coordsList.push([br.x, br.y]);
     ptsList.push(br);
     const bl = new Ball(0, canvas.height, 0, 0);
+    coordsList.push([bl.x, bl.y]);
     ptsList.push(bl);
     const tr = new Ball(canvas.width, 0, 0, 0);
+    coordsList.push([tr.x, tr.y]);
     ptsList.push(tr);
     const tl = new Ball(0, 0, 0, 0);
+    coordsList.push([tl.x, tl.y]);
     ptsList.push(tl);
 
-    function drawPolygon(obj1, obj2, obj3) {
-      ctx.fillStyle = '#000';
+    function getX(i) {
+      return coordsList[i][0];
+    }
+
+    function getY(i) {
+        return coordsList[i][1];
+    }
+    
+    function updateCoords() {
+      coordsList.length = 0;
+      for (let i=0; i < ptsList.length; i++) {
+        coordsList.push([ptsList[i].x, ptsList[i].y]);
+      }
+    }
+
+
+    function drawPolygon(x1, y1, x2, y2, x3, y3) {
+      console.log("drawing");
+      ctx.globalAlpha = 0.8;
+      ctx.fillStyle = "black";
       ctx.beginPath();
-      ctx.moveTo(obj1.x, obj1.y);
-      ctx.lineTo(obj2.x, obj2.y);
-      ctx.lineTo(obj3.x, obj3.y);
-      ctx.lineTo(obj1.x, obj1.y);
+      ctx.moveTo(x1, y1);
+      ctx.lineTo(x2, y2);
+      ctx.lineTo(x3, y3);
+      ctx.lineTo(x1, y1);
       ctx.closePath();
       ctx.fill();
     }
 
-    function findClosest(objList) {
-      // defaults (TODO: Find way to not need obj defaults)
-      var minDist = 99999999999999;
-      var minDist2 = 99999999999999;
-      var minObj = objList[0];
-      var minObj2 = objList[0];
-
-      for (var i=0; i < objList.length; i++) {
-        for (var j=0; j < objList.length; j++) {
-          if (objList[i] != objList[j]) {
-
-            if (Math.pow(objList[i].x - objList[j].x, 2) + 
-                Math.pow(objList[i].y - objList[j].y, 2) < minDist) {
-              
-              minDist2 = minDist;
-              minDist = Math.pow(objList[i].x - objList[j].x, 2) + Math.pow(objList[i].y - objList[j].y, 2);
-              minObj2 = minObj;
-              minObj = objList[i];
-
-            }
-   
-            else if (Math.pow(objList[i].x - objList[j].x, 2) + 
-                     Math.pow(objList[i].y - objList[j].y, 2) < minDist2) {
-              
-              minDist2 = Math.pow(objList[i].x - objList[j].x, 2) + Math.pow(objList[i].y - objList[j].y, 2);
-              minObj = objList[i];
-
-            }
-          }
-        }
-        drawPolygon(objList[i], minObj, minObj2);
-      } 
+    function getTriangles(coords) {
+      var delauny = Delaunator.from(coords);
+      var triangles = delauny.triangles;
+      for (let i=0; i < triangles.length; i+=3) {
+        drawPolygon(getX(triangles[i]), getY(triangles[i]), getX(triangles[i+1]), getY(triangles[i+1]), getX(triangles[i+2]), getY(triangles[i+2]));
+      }
     }
     
     function draw() {
         ctx.clearRect(0, 0, canvas.width, canvas.height);
-        for (var i=0; i < ptsList.length; i++) {
+        for (let i=0; i < ptsList.length; i+=2) {
           ptsList[i].drawBall();
         }
-        findClosest(ptsList);
-        // drawPolygon(b1, b2, b3);
+
+        updateCoords();
+        getTriangles(coordsList);
+        // drawPolygon(bl.x, bl.y, tl.x, tl.y, b1.x, b3.y);
     }
 
     setInterval(draw, 10);
@@ -134,8 +142,6 @@ export default {
   },
 }
 </script>
-
-
 
 <style>
 
