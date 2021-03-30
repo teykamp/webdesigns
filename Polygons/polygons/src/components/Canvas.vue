@@ -54,32 +54,26 @@ export default {
         this.y += this.dy;
       }
     }
-    const b1 = new Ball(randomNumber(0,canvas.width), randomNumber(0,canvas.height), randomNumber(-.5, .5), randomNumber(-.5, .5));
-    coordsList.push([b1.x, b1.y]);
-    ptsList.push(b1);
-    const b2 = new Ball(randomNumber(0,canvas.width), randomNumber(0,canvas.height), randomNumber(-.5, .5), randomNumber(-.5, .5));
-    coordsList.push([b2.x, b2.y]);
-    ptsList.push(b2);
-    const b3 = new Ball(randomNumber(0,canvas.width), randomNumber(0,canvas.height), randomNumber(-.5, .5), randomNumber(-.5, .5));
-    coordsList.push([b3.x, b3.y]);
-    ptsList.push(b3);
-    const b4 = new Ball(randomNumber(0,canvas.width), randomNumber(0,canvas.height), randomNumber(-.5, .5), randomNumber(-.5, .5));
-    coordsList.push([b4.x, b4.y]);
-    ptsList.push(b4);
 
-    // Corners
-    const br = new Ball(canvas.width, canvas.height, 0, 0);
-    coordsList.push([br.x, br.y]);
-    ptsList.push(br);
-    const bl = new Ball(0, canvas.height, 0, 0);
-    coordsList.push([bl.x, bl.y]);
-    ptsList.push(bl);
-    const tr = new Ball(canvas.width, 0, 0, 0);
-    coordsList.push([tr.x, tr.y]);
-    ptsList.push(tr);
-    const tl = new Ball(0, 0, 0, 0);
-    coordsList.push([tl.x, tl.y]);
-    ptsList.push(tl);
+    function createPoints(num) {
+      for (let i=0; i < num; i++) {
+        ptsList[i] = new Ball(randomNumber(0,canvas.width), randomNumber(0,canvas.height), randomNumber(-.5, .5), randomNumber(-.5, .5));
+        coordsList.push(ptsList[i].x, ptsList[i].y);
+      }
+      // Corners
+      const br = new Ball(canvas.width, canvas.height, 0, 0);
+      coordsList.push([br.x, br.y]);
+      ptsList.push(br);
+      const bl = new Ball(0, canvas.height, 0, 0);
+      coordsList.push([bl.x, bl.y]);
+      ptsList.push(bl);
+      const tr = new Ball(canvas.width, 0, 0, 0);
+      coordsList.push([tr.x, tr.y]);
+      ptsList.push(tr);
+      const tl = new Ball(0, 0, 0, 0);
+      coordsList.push([tl.x, tl.y]);
+      ptsList.push(tl);
+    }
 
     function getX(i) {
       return coordsList[i][0];
@@ -97,10 +91,9 @@ export default {
     }
 
 
-    function drawPolygon(x1, y1, x2, y2, x3, y3) {
-      console.log("drawing");
+    function drawPolygon(x1, y1, x2, y2, x3, y3, color="hsl(0,0%,0%)") {
       ctx.globalAlpha = 0.8;
-      ctx.fillStyle = "black";
+      ctx.fillStyle = color;
       ctx.beginPath();
       ctx.moveTo(x1, y1);
       ctx.lineTo(x2, y2);
@@ -110,11 +103,25 @@ export default {
       ctx.fill();
     }
 
+    function getColor(area) {
+      var sat = area/1000 % 100;
+      var light = area/1000 % 100;
+      // example return hsl(170,100%,50%)
+      return `hsl(170, ${sat}%, ${light}%)`;
+    }
+
+    function getArea(x1, y1, x2, y2, x3, y3) {
+      // must be -1 to make area positive
+      return -1 * 0.5 * ((x1 * (y2-y3)) + (x2 * (y3-y1)) + (x3 * (y1-y2)));
+    }
+
     function getTriangles(coords) {
       var delauny = Delaunator.from(coords);
       var triangles = delauny.triangles;
       for (let i=0; i < triangles.length; i+=3) {
-        drawPolygon(getX(triangles[i]), getY(triangles[i]), getX(triangles[i+1]), getY(triangles[i+1]), getX(triangles[i+2]), getY(triangles[i+2]));
+        drawPolygon(getX(triangles[i]), getY(triangles[i]), getX(triangles[i+1]), getY(triangles[i+1]), getX(triangles[i+2]), getY(triangles[i+2]), 
+                    getColor(getArea(getX(triangles[i]), getY(triangles[i]), getX(triangles[i+1]), getY(triangles[i+1]), getX(triangles[i+2]), getY(triangles[i+2])))
+                    );
       }
     }
     
@@ -129,6 +136,7 @@ export default {
         // drawPolygon(bl.x, bl.y, tl.x, tl.y, b1.x, b3.y);
     }
 
+    createPoints(50);
     setInterval(draw, 10);
 
   },
