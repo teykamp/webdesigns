@@ -120,7 +120,7 @@ export default {
     
     function draw() {
         ctx.clearRect(0, 0, canvas.width, canvas.height);
-        for (let i=0; i < ptsList.length; i+=2) {
+        for (let i=0; i < ptsList.length; i+=1) {
           ptsList[i].drawBall();
         }
 
