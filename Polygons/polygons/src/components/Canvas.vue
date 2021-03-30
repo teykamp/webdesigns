@@ -23,7 +23,7 @@ export default {
     var ctx = canvas.getContext("2d");
     canvas.height = window.innerHeight-20;
     canvas.width = window.innerWidth-20;
-    const ballRadius = 5;
+    const ballRadius = 0;
     var ptsList = [];
     var coordsList = [];
     // const filllist = ['#f00', '#0f0', '#00f', '#f0f'];
@@ -73,6 +73,12 @@ export default {
       const tl = new Ball(0, 0, 0, 0);
       coordsList.push([tl.x, tl.y]);
       ptsList.push(tl);
+      const ml = new Ball(0, canvas.height/2, 0, 0);
+      coordsList.push([ml.x, ml.y]);
+      ptsList.push(ml);
+      const mr = new Ball(canvas.width, canvas.height/2, 0, 0);
+      coordsList.push([mr.x, mr.y]);
+      ptsList.push(mr);
     }
 
     function getX(i) {
@@ -92,7 +98,7 @@ export default {
 
 
     function drawPolygon(x1, y1, x2, y2, x3, y3, color="hsl(0,0%,0%)") {
-      ctx.globalAlpha = 0.8;
+      ctx.globalAlpha = 0.9;
       ctx.fillStyle = color;
       ctx.beginPath();
       ctx.moveTo(x1, y1);
@@ -103,11 +109,15 @@ export default {
       ctx.fill();
     }
 
-    function getColor(area) {
-      var sat = area/1000 % 100;
-      var light = area/1000 % 100;
+    function getColorArea(area) {
+      // called when type == area
       // example return hsl(170,100%,50%)
-      return `hsl(170, ${sat}%, ${light}%)`;
+      return `hsl(170, ${area/1000 % 100}%, ${area/1000 % 100}%)`;
+    }
+
+    function getColorLocation(posY) {
+      // called when type == location
+      return `hsl(170, ${posY/10 % 100}%, ${posY/10 % 100}%)`;
     }
 
     function getArea(x1, y1, x2, y2, x3, y3) {
@@ -115,13 +125,20 @@ export default {
       return -1 * 0.5 * ((x1 * (y2-y3)) + (x2 * (y3-y1)) + (x3 * (y1-y2)));
     }
 
-    function getTriangles(coords) {
+    function getTriangles(coords, type) {
       var delauny = Delaunator.from(coords);
       var triangles = delauny.triangles;
       for (let i=0; i < triangles.length; i+=3) {
-        drawPolygon(getX(triangles[i]), getY(triangles[i]), getX(triangles[i+1]), getY(triangles[i+1]), getX(triangles[i+2]), getY(triangles[i+2]), 
-                    getColor(getArea(getX(triangles[i]), getY(triangles[i]), getX(triangles[i+1]), getY(triangles[i+1]), getX(triangles[i+2]), getY(triangles[i+2])))
-                    );
+        if (type == "area") {
+          drawPolygon(getX(triangles[i]), getY(triangles[i]), getX(triangles[i+1]), getY(triangles[i+1]), getX(triangles[i+2]), getY(triangles[i+2]), 
+                      getColorArea(getArea(getX(triangles[i]), getY(triangles[i]), getX(triangles[i+1]), getY(triangles[i+1]), getX(triangles[i+2]), getY(triangles[i+2])))
+                      );
+        }
+        if (type == "location") {
+          drawPolygon(getX(triangles[i]), getY(triangles[i]), getX(triangles[i+1]), getY(triangles[i+1]), getX(triangles[i+2]), getY(triangles[i+2]), 
+                      getColorLocation(Math.min(getY(triangles[i]), getY(triangles[i+1]), getY(triangles[i+2])))
+                      );
+        }
       }
     }
     
@@ -132,7 +149,8 @@ export default {
         }
 
         updateCoords();
-        getTriangles(coordsList);
+        // shading types: area, location
+        getTriangles(coordsList, "location");
         // drawPolygon(bl.x, bl.y, tl.x, tl.y, b1.x, b3.y);
     }
 
