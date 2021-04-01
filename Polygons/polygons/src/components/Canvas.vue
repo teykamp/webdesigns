@@ -33,30 +33,52 @@ export default {
       constructor(x, y, dx, dy) {
         this.x = x;
         this.y = y;
-        this.dx = dx;
-        this.dy = dy;
+        this.dx = dx; // r for circle movement
+        this.dy = dy; // dtheta for circle movement
       }
 
-      drawBall() {
+      drawBall(type) {
         ctx.beginPath();
         ctx.arc(this.x, this.y, ballRadius, 0, Math.PI*2);
         ctx.fillStyle = "#000";
         ctx.fill();
         ctx.closePath();
-        if (this.x + this.dx > canvas.width-ballRadius || this.x + this.dx < ballRadius) {
-            this.dx = -this.dx;
+
+        if (type == "bounce") {
+          if (this.x + this.dx > canvas.width-ballRadius || this.x + this.dx < ballRadius) {
+              this.dx = -this.dx;
+          }
+          if (this.y + this.dy > canvas.height-ballRadius || this.y + this.dy < ballRadius) {
+              this.dy = -this.dy;
+          }
+          
+          this.x += this.dx;
+          this.y += this.dy;
         }
-        if (this.y + this.dy > canvas.height-ballRadius || this.y + this.dy < ballRadius) {
-            this.dy = -this.dy;
+
+        else if (type == "circle") {
+          let x = this.x;
+          let y = this.y;
+          this.x = x + (this.dx * Math.cos(this.dy));
+          this.y = y + (this.dx * Math.sin(this.dy));
+          if (this.dy >= 0) {
+            this.dy += .01;
+          }
+          else {
+            this.dy -= .01;
+          }
         }
-        
-        this.x += this.dx;
-        this.y += this.dy;
+
+        else {
+          alert("Incorrect movement type passed");
+        }
       }
     }
 
     function createPoints(num) {
       for (let i=0; i < num; i++) {
+        // for bounce movement: x, y, dx, dy
+        // for circle movement: x, y, r, dtheta
         ptsList[i] = new Ball(randomNumber(0,canvas.width), randomNumber(0,canvas.height), randomNumber(-.5, .5), randomNumber(-.5, .5));
         coordsList.push(ptsList[i].x, ptsList[i].y);
       }
@@ -140,10 +162,15 @@ export default {
                       getColorArea(getArea(getX(triangles[i]), getY(triangles[i]), getX(triangles[i+1]), getY(triangles[i+1]), getX(triangles[i+2]), getY(triangles[i+2])), currentHue)
                       );
         }
-        if (type == "location") {
+
+        else if (type == "location") {
           drawPolygon(getX(triangles[i]), getY(triangles[i]), getX(triangles[i+1]), getY(triangles[i+1]), getX(triangles[i+2]), getY(triangles[i+2]), 
                       getColorLocation(Math.min(getY(triangles[i]), getY(triangles[i+1]), getY(triangles[i+2])), currentHue)
                       );
+        }
+
+        else {
+          alert("Incorrect draw type passed");
         }
       }
     }
@@ -151,7 +178,8 @@ export default {
     function draw() {
         ctx.clearRect(0, 0, canvas.width, canvas.height);
         for (let i=0; i < ptsList.length; i+=1) {
-          ptsList[i].drawBall();
+          // movement types: bounce, circle
+          ptsList[i].drawBall("circle");
         }
 
         updateCoords();
