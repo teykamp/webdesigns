@@ -43,10 +43,10 @@ export default {
         ctx.fillStyle = "#000";
         ctx.fill();
         ctx.closePath();
-        if(this.x + this.dx > canvas.width-ballRadius || this.x + this.dx < ballRadius) {
+        if (this.x + this.dx > canvas.width-ballRadius || this.x + this.dx < ballRadius) {
             this.dx = -this.dx;
         }
-        if(this.y + this.dy > canvas.height-ballRadius || this.y + this.dy < ballRadius) {
+        if (this.y + this.dy > canvas.height-ballRadius || this.y + this.dy < ballRadius) {
             this.dy = -this.dy;
         }
         
@@ -95,7 +95,6 @@ export default {
         coordsList.push([ptsList[i].x, ptsList[i].y]);
       }
     }
-
 
     function drawPolygon(x1, y1, x2, y2, x3, y3, color) {
       ctx.globalAlpha = 0.9;
