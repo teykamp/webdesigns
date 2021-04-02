@@ -62,10 +62,10 @@ export default {
           this.x = x + (this.dx * Math.cos(this.dy));
           this.y = y + (this.dx * Math.sin(this.dy));
           if (this.dy >= 0) {
-            this.dy += .01;
+            this.dy += .001;
           }
           else {
-            this.dy -= .01;
+            this.dy -= .001;
           }
         }
 
@@ -140,7 +140,7 @@ export default {
     function getColorArea(area, hue) {
       // called when type == area
       // example return hsl(170,100%,50%)
-      return `hsl(${hue}, ${area/1000 % 100}%, ${area/1000 % 100}%)`;
+      return `hsl(${hue}, ${area/1000 % 200}%, ${area/1000 % 200}%)`;
     }
 
     function getColorLocation(posY, hue) {
@@ -185,7 +185,7 @@ export default {
         updateCoords();
         // shading types: area, location
         // startHue = 1
-        getTriangles(coordsList, "location", hue);
+        getTriangles(coordsList, "area", hue);
         hue = getHue(hue)
         // drawPolygon(bl.x, bl.y, tl.x, tl.y, b1.x, b3.y);
     }
