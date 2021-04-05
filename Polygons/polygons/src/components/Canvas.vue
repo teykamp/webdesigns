@@ -82,7 +82,7 @@ export default {
         ptsList[i] = new Ball(randomNumber(0,canvas.width), randomNumber(0,canvas.height), randomNumber(-.5, .5), randomNumber(-.5, .5));
         coordsList.push(ptsList[i].x, ptsList[i].y);
       }
-      // Corners
+      // Corners and l/r sides
       const br = new Ball(canvas.width, canvas.height, 0, 0);
       coordsList.push([br.x, br.y]);
       ptsList.push(br);
