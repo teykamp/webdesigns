@@ -11,6 +11,8 @@ export default {
   data() {
     return {
       timer: "",
+      moveType: "bounce",
+      shadeType: "location",
     }
   },
   mounted() {
@@ -27,6 +29,8 @@ export default {
     var ptsList = [];
     var coordsList = [];
     var hue = 1;
+    var shadeType = this.shadeType;
+    var moveType = this.moveType; 
 
 
     class Ball {
@@ -70,7 +74,7 @@ export default {
         }
 
         else {
-          alert("Incorrect movement type passed");
+          alert("Incorrect movement type passed: " + type);
         }
       }
     }
@@ -170,7 +174,7 @@ export default {
         }
 
         else {
-          alert("Incorrect draw type passed");
+          alert("Incorrect draw type passed: " + type);
         }
       }
     }
@@ -179,13 +183,13 @@ export default {
         ctx.clearRect(0, 0, canvas.width, canvas.height);
         for (let i=0; i < ptsList.length; i+=1) {
           // movement types: bounce, circle
-          ptsList[i].drawBall("circle");
+          ptsList[i].drawBall(moveType);
         }
 
         updateCoords();
         // shading types: area, location
         // startHue = 1
-        getTriangles(coordsList, "area", hue);
+        getTriangles(coordsList, shadeType, hue);
         hue = getHue(hue)
         // drawPolygon(bl.x, bl.y, tl.x, tl.y, b1.x, b3.y);
     }
@@ -193,10 +197,6 @@ export default {
     createPoints(50);
     setInterval(draw, 10);
 
-  },
-
-  methods() {
-    
   },
 
   computed() {
