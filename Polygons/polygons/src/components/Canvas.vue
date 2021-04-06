@@ -1,6 +1,11 @@
 <template>
   <div id="app">
     <canvas id="canvas" />
+    <div class="tools">
+      <button>Change Movement</button>
+      <button>Change Shading</button>
+      <button>Kaleidescope</button>
+    </div>
   </div>
 </template>
 
@@ -15,6 +20,17 @@ export default {
       shadeType: "location",
     }
   },
+  
+  methods: {
+    shadeInit() {
+      this.shadeType = (this.shadeType == "circle" ? "bounce" : "circle");
+    },
+
+    moveInit() {
+      this.moveType = (this.moveType == "location" ? "area" : "location");
+    }
+
+  },
   mounted() {
     function randomNumber(min, max) {  
         return Math.random() * (max - min) + min; 
@@ -23,7 +39,7 @@ export default {
     // admin
     var canvas = document.getElementById("canvas");
     var ctx = canvas.getContext("2d");
-    canvas.height = window.innerHeight-20;
+    canvas.height = window.innerHeight-45;
     canvas.width = window.innerWidth-20;
     const ballRadius = 0;
     var ptsList = [];
@@ -31,6 +47,7 @@ export default {
     var hue = 1;
     var shadeType = this.shadeType;
     var moveType = this.moveType; 
+
 
 
     class Ball {
