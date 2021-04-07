@@ -2,8 +2,8 @@
   <div id="app">
     <canvas id="canvas" />
     <div class="tools">
-      <button @click="shadeInit()">Change Shading</button>
-      <button @click="moveInit()">Change Movement</button>
+      <button @click="shadeFlip()">Change Shading</button>
+      <button @click="moveFlip()">Change Movement</button>
       <button>Kaleidescope</button>
     </div>
   </div>
@@ -18,19 +18,22 @@ export default {
       timer: "",
       moveType: "bounce",
       shadeType: "area",
+      ptsList: [],
+      coordsList: [],
+      hue: 1,
     }
   },
   
   methods: { // TODO: Clear Points List after each Button Push /////// Format functions
-    shadeInit() {
+    shadeFlip() {
       this.shadeType = (this.shadeType == "location" ? "area" : "location");
     },
 
-    moveInit() {
-      this.moveType = (this.moveType == "circle" ? "bounce" : "circle");
+    moveFlip() {
+      this.moveType = (this.moveType == "circle" ? "bounce" : "circle"); // TODO: fix speeding up after several toggles
     },
 
-    init() {
+    controller() {
         function randomNumber(min, max) {  
           return Math.random() * (max - min) + min; 
       }
@@ -41,9 +44,6 @@ export default {
       canvas.height = window.innerHeight-45;
       canvas.width = window.innerWidth-20;
       const ballRadius = 0;
-      var ptsList = [];
-      var coordsList = [];
-      var hue = 1; 
       var self = this;
 
 
@@ -100,42 +100,42 @@ export default {
         for (let i=0; i < num; i++) {
           // for bounce movement: x, y, dx, dy
           // for circle movement: x, y, r, dtheta
-          ptsList[i] = new Ball(randomNumber(0,canvas.width), randomNumber(0,canvas.height), randomNumber(-.5, .5), randomNumber(-.5, .5));
-          coordsList.push(ptsList[i].x, ptsList[i].y);
+          self.ptsList[i] = new Ball(randomNumber(0,canvas.width), randomNumber(0,canvas.height), randomNumber(-.5, .5), randomNumber(-.5, .5));
+          self.coordsList.push(self.ptsList[i].x, self.ptsList[i].y);
         }
         // Corners and l/r sides
         const br = new Ball(canvas.width, canvas.height, 0, 0);
-        coordsList.push([br.x, br.y]);
-        ptsList.push(br);
+        self.coordsList.push([br.x, br.y]);
+        self.ptsList.push(br);
         const bl = new Ball(0, canvas.height, 0, 0);
-        coordsList.push([bl.x, bl.y]);
-        ptsList.push(bl);
+        self.coordsList.push([bl.x, bl.y]);
+        self.ptsList.push(bl);
         const tr = new Ball(canvas.width, 0, 0, 0);
-        coordsList.push([tr.x, tr.y]);
-        ptsList.push(tr);
+        self.coordsList.push([tr.x, tr.y]);
+        self.ptsList.push(tr);
         const tl = new Ball(0, 0, 0, 0);
-        coordsList.push([tl.x, tl.y]);
-        ptsList.push(tl);
+        self.coordsList.push([tl.x, tl.y]);
+        self.ptsList.push(tl);
         const ml = new Ball(0, canvas.height/2, 0, 0);
-        coordsList.push([ml.x, ml.y]);
-        ptsList.push(ml);
+        self.coordsList.push([ml.x, ml.y]);
+        self.ptsList.push(ml);
         const mr = new Ball(canvas.width, canvas.height/2, 0, 0);
-        coordsList.push([mr.x, mr.y]);
-        ptsList.push(mr);
+        self.coordsList.push([mr.x, mr.y]);
+        self.ptsList.push(mr);
       }
 
       function getX(i) {
-        return coordsList[i][0];
+        return self.coordsList[i][0];
       }
 
       function getY(i) {
-          return coordsList[i][1];
+          return self.coordsList[i][1];
       }
       
       function updateCoords() {
-        coordsList.length = 0;
-        for (let i=0; i < ptsList.length; i++) {
-          coordsList.push([ptsList[i].x, ptsList[i].y]);
+        self.coordsList.length = 0;
+        for (let i=0; i < self.ptsList.length; i++) {
+          self.coordsList.push([self.ptsList[i].x, self.ptsList[i].y]);
         }
       }
 
@@ -151,7 +151,7 @@ export default {
         ctx.fill();
       }
 
-      function getHue(hue) {
+      function getHue(hue) { // TODO: allow user to specify color or to use this function
         if (hue == 256) {
           return 1;
         }
@@ -161,12 +161,12 @@ export default {
       function getColorArea(area, hue) {
         // called when type == area
         // example return hsl(170,100%,50%)
-        return `hsl(${hue}, ${area/1000 % 200}%, ${area/1000 % 200}%)`;
+        return `hsl(${hue}, ${area/1000 % 200}%, ${area/1000 % 200}%)`; // TODO: Fix Colors
       }
 
       function getColorLocation(posY, hue) {
         // called when type == location
-        return `hsl(${hue}, ${posY/10 % 100}%, ${posY/10 % 100}%)`;
+        return `hsl(${hue}, ${posY/10 % 100}%, ${posY/10 % 100}%)`; // TODO: Fix Colors
       }
 
       function getArea(x1, y1, x2, y2, x3, y3) {
@@ -198,16 +198,16 @@ export default {
       
       function draw(moveType, shadeType) {
           ctx.clearRect(0, 0, canvas.width, canvas.height);
-          for (let i=0; i < ptsList.length; i+=1) {
+          for (let i=0; i < self.ptsList.length; i+=1) {
             // movement types: bounce, circle
-            ptsList[i].drawBall(moveType);
+            self.ptsList[i].drawBall(moveType);
           }
 
           updateCoords();
           // shading types: area, location
           // startHue = 1
-          getTriangles(coordsList, shadeType, hue);
-          hue = getHue(hue)
+          getTriangles(self.coordsList, shadeType, self.hue);
+          self.hue = getHue(self.hue)
           // drawPolygon(bl.x, bl.y, tl.x, tl.y, b1.x, b3.y);
       }
 
@@ -217,7 +217,7 @@ export default {
 
   },
   mounted() {
-    this.init();
+    this.controller();
 
   },
 
