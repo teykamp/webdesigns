@@ -33,18 +33,18 @@ export default {
       this.moveType = (this.moveType == "circle" ? "bounce" : "circle"); // TODO: fix speeding up after several toggles
     },
 
-    controller() {
-        function randomNumber(min, max) {  
-          return Math.random() * (max - min) + min; 
-      }
+    randomNumber(min, max) {  
+      return Math.random() * (max - min) + min; 
+    },
 
+    controller() {
       // admin
       var canvas = document.getElementById("canvas");
       var ctx = canvas.getContext("2d");
       canvas.height = window.innerHeight-45;
       canvas.width = window.innerWidth-20;
       const ballRadius = 0;
-      var self = this;
+      var self = this; // TODO: find better way (Wont recognise self. inside of other functions)
 
 
       class Ball {
@@ -100,7 +100,7 @@ export default {
         for (let i=0; i < num; i++) {
           // for bounce movement: x, y, dx, dy
           // for circle movement: x, y, r, dtheta
-          self.ptsList[i] = new Ball(randomNumber(0,canvas.width), randomNumber(0,canvas.height), randomNumber(-.5, .5), randomNumber(-.5, .5));
+          self.ptsList[i] = new Ball(self.randomNumber(0,canvas.width), self.randomNumber(0,canvas.height), self.randomNumber(-.5, .5), self.randomNumber(-.5, .5));
           self.coordsList.push(self.ptsList[i].x, self.ptsList[i].y);
         }
         // Corners and l/r sides
