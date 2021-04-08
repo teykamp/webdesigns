@@ -21,6 +21,7 @@ export default {
       ptsList: [],
       coordsList: [],
       hue: 1,
+      tickSpeed: 10,
     }
   },
   
@@ -30,7 +31,11 @@ export default {
     },
 
     moveFlip() {
-      this.moveType = (this.moveType == "circle" ? "bounce" : "circle"); // TODO: fix speeding up after several toggles
+      this.moveType = (this.moveType == "circle" ? "bounce" : "circle"); // TODO: fix speeding up after several toggles. FIXED: current fix is horrible
+      this.tickSpeed += 100;
+      this.ptsList.length = 0;
+      this.coordsList.length = 0;
+      this.controller();
     },
 
     randomNumber(min, max) {  
@@ -212,16 +217,12 @@ export default {
       }
 
       createPoints(50);
-      setInterval(function() { draw(self.moveType, self.shadeType) }, 10);
+      setInterval(function() { draw(self.moveType, self.shadeType) }, self.tickSpeed);
     }
 
   },
   mounted() {
     this.controller();
-
-  },
-
-  computed() {
 
   },
 }
