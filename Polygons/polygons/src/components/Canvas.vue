@@ -216,7 +216,7 @@ export default {
           // drawPolygon(bl.x, bl.y, tl.x, tl.y, b1.x, b3.y);
       }
 
-      createPoints(50);
+      createPoints(50); // TODO: make this changable??
       setInterval(function() { draw(self.moveType, self.shadeType) }, self.tickSpeed);
     }
 
