@@ -25,7 +25,7 @@ export default {
     }
   },
   
-  methods: { // TODO: Clear Points List after each Button Push /////// Format functions
+  methods: { // TODO: Format functions
     shadeFlip() {
       this.shadeType = (this.shadeType == "location" ? "area" : "location");
     },
