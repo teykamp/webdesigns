@@ -5,7 +5,7 @@
 </template>
 
 <script>
-import Particle from "../classes/Particle.js";
+import Planet from "../classes/Planet.js";
 
 export default {
     data() {
@@ -13,8 +13,8 @@ export default {
             ctx: null,
             height: 0,
             width: 0,
-            ptsList: [],
-            size: 10,
+            planetList: [],
+            size: 5,
         }
     },
 
@@ -25,27 +25,29 @@ export default {
         
         createPoints(num) {
             for (let i=0; i < num; i++) {
-                this.ptsList.push(new Particle(this.width/2, this.height/2, this.randomNumber(-.5, .5), this.randomNumber(-.5, .5), this.size));
+                this.planetList.push(new Planet(this.randomNumber(0, this.width-this.size), this.randomNumber(0, this.height-this.size), this.randomNumber(-.5, .5), this.randomNumber(-.5, .5), this.size));
             }
         },
 
         draw() {
             this.ctx.clearRect(0, 0, this.width, this.height)
-            for (let i=0; i < this.ptsList.length; i++) {
-                let coords = this.ptsList[i].getCoords(this.height, this.width);
+            for (let i=0; i < this.planetList.length; i++) {
+                this.planetList[i].updateCoords(this.height, this.width, this.planetList);
                 this.ctx.fillStyle = 'green';
-                this.ctx.fillRect(coords[0], coords[1], this.size, this.size);
+                this.ctx.fillRect(this.planetList[i].x, this.planetList[i].y, this.planetList[i].size, this.planetList[i].size);
             }
         },
 
         init() {
             var canvas = document.getElementById("canvas");
             this.ctx = canvas.getContext("2d");
-            canvas.height = window.innerHeight-20;
+            canvas.height = window.innerHeight-50;
             this.height = canvas.height;
-            canvas.width = window.innerWidth-20;
+            canvas.width = innerWidth-50;
             this.width = canvas.width;
-            this.createPoints(10);
+            // sun
+            this.planetList.push(new Planet(this.width/2, this.height/2, 0, 0, 1000))
+            this.createPoints(2);
 
             setInterval(this.draw, 10);
         },
@@ -61,7 +63,5 @@ export default {
 </script>
 
 <style scoped>
-.canvas {
-    border-style: 5px, solid;
-}
+
 </style>
