@@ -14,7 +14,9 @@ export default {
             height: 0,
             width: 0,
             planetList: [],
-            size: 5,
+            size: 500,
+            id: 1,
+            G : 0.001,
         }
     },
 
@@ -26,14 +28,16 @@ export default {
         createPoints(num) {
             // will evenually be called on mouse click and will handle sizes (mouse hold or scroll)
             for (let i=0; i < num; i++) {
-                this.planetList.push(new Planet(this.randomNumber(500, this.width-(this.size)-500), this.randomNumber(0, this.height-(this.size*10)), this.randomNumber(-10, 10), this.randomNumber(-10, 10), this.size));
+                this.planetList.push(new Planet(this.randomNumber(50, this.width-50), this.randomNumber(50, this.height-50), this.randomNumber(-5, 5), this.randomNumber(-5, 5), this.size, this.id));
+                // this.planetList.push(new Planet(this.width/2, 500, 0, 8, 1, this.id))
+                this.id++;
             }
         },
 
         draw() {
-            this.ctx.clearRect(0, 0, this.width, this.height)
+            // this.ctx.clearRect(0, 0, this.width, this.height)
             for (let i=0; i < this.planetList.length; i++) {
-                this.planetList[i].moveTowards(this.planetList);
+                this.planetList[i].moveTowards(this.planetList, this.G);
                 this.ctx.beginPath();
                 this.ctx.arc(this.planetList[i].x, this.planetList[i].y, this.planetList[i].radius, 0, Math.PI * 2, false);
                 this.ctx.fillStyle = "blue";
@@ -48,7 +52,7 @@ export default {
             this.height = canvas.height;
             canvas.width = innerWidth-50;
             this.width = canvas.width;
-            this.planetList.push(new Planet(this.width/2, this.height/2, 0, 0, 100000000)) // sun
+            this.planetList.push(new Planet(this.width/2, this.height/2, 0, 0, 100000, 999)); // sun
             this.createPoints(2);
 
             setInterval(this.draw, 10);
