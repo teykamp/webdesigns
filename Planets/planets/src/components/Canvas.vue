@@ -16,7 +16,7 @@ export default {
             planetList: [],
             size: 500,
             id: 1,
-            G : 0.00001,
+            G : 0.009,
         }
     },
 
@@ -36,11 +36,21 @@ export default {
         },
 
         drawVector(planet) {
-            const magnitude = Math.sqrt(Math.pow(planet.ax, 2) + Math.pow(planet.ay, 2));
+            // not for sun
+            if (planet.id == 0) {
+                return;
+            }
+            const aMagnitude = Math.sqrt(Math.pow(planet.ax, 2) + Math.pow(planet.ay, 2));
+            const vMagnitude = Math.sqrt(Math.pow(planet.dx, 2) + Math.pow(planet.dy, 2));
+            this.ctx.strokeStyle = "red";
             this.ctx.beginPath();
             this.ctx.moveTo(planet.x, planet.y);
-            this.ctx.lineTo(planet.x + planet.ax/magnitude * 50, planet.y + planet.ay/magnitude * 50);
-            // console.log(planet.x/magnitude);
+            this.ctx.lineTo(planet.x + planet.ax/aMagnitude * 50, planet.y + planet.ay/aMagnitude * 50);
+            this.ctx.stroke();
+            this.ctx.strokeStyle = "green";
+            this.ctx.beginPath();
+            this.ctx.moveTo(planet.x, planet.y);
+            this.ctx.lineTo(planet.x + planet.dx/vMagnitude * 50, planet.y + planet.dy/vMagnitude * 50);
             this.ctx.stroke();
         },
 
@@ -63,7 +73,7 @@ export default {
             this.height = canvas.height;
             canvas.width = innerWidth-50;
             this.width = canvas.width;
-            this.planetList.push(new Planet(this.width/2, this.height/2, 0, 0, 100000, 999)); // sun
+            this.planetList.push(new Planet(this.width/2, this.height/2, 0, 0, 1000, 0)); // sun
             this.createPoints(1);
 
             setInterval(this.draw, 10);

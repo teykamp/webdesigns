@@ -23,8 +23,8 @@ export default class Planet {
             const r = Math.sqrt(Math.pow(deltaX, 2) + Math.pow(deltaY, 2));
             const force = G * planetList[i].mass / r;
         
-            this.ax -= Math.sign(deltaX) * force * Math.cos(angle);   
-            this.ay -= Math.sign(deltaY) * force * Math.sin(angle);
+            this.ax = -Math.sign(deltaX) * force * Math.cos(angle);   
+            this.ay = -Math.sign(deltaY) * force * Math.sin(angle);
             this.dx += this.ax;
             this.dy += this.ay;
             this.x += this.dx;
