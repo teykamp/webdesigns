@@ -7,7 +7,7 @@ export default class Planet {
         this.ax = 0;
         this.ay = 0;
         this.mass = mass;
-        this.radius = 1; // make some function of mass
+        this.radius = 3; // make some function of mass
         this.id = id;
     }
 
@@ -20,9 +20,8 @@ export default class Planet {
             const deltaX = this.x - planetList[i].x;
             const deltaY = this.y - planetList[i].y;
             const angle = Math.abs(Math.atan(deltaY / deltaX));
-            // console.log(angle * 180 / Math.PI)
-            const r2 = Math.pow(deltaX, 2) + Math.pow(deltaY, 2);
-            const force = G * planetList[i].mass / r2;
+            const r = Math.sqrt(Math.pow(deltaX, 2) + Math.pow(deltaY, 2));
+            const force = G * planetList[i].mass / r;
         
             this.ax -= Math.sign(deltaX) * force * Math.cos(angle);   
             this.ay -= Math.sign(deltaY) * force * Math.sin(angle);
