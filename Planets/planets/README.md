@@ -1,4 +1,4 @@
-# mold
+# Planets
 
 ## Project setup
 ```
