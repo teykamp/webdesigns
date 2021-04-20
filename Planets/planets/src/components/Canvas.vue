@@ -54,7 +54,7 @@ export default {
             this.ctx.stroke();
         },
 
-        draw() {
+        draw() { // TODO: colored dots per planet
             this.ctx.clearRect(0, 0, this.width, this.height)
             for (let i=0; i < this.planetList.length; i++) {
                 this.planetList[i].moveTowards(this.planetList, this.G);
@@ -74,7 +74,7 @@ export default {
             canvas.width = innerWidth-50;
             this.width = canvas.width;
             this.planetList.push(new Planet(this.width/2, this.height/2, 0, 0, 10000, 0)); // sun
-            this.createPoints(2); // TODO: make vectors work with multiple planets
+            this.createPoints(2); 
 
             setInterval(this.draw, 10);
         },
