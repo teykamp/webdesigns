@@ -12,19 +12,23 @@ export default class Planet {
     }
 
     moveTowards(planetList, G) {
+        // reset
+        this.ax = 0;
+        this.ay = 0;
+
         for (let i=0; i < planetList.length; i++) {
             if (this.id == planetList[i].id) {
                 continue;
             }
-            
+
             const deltaX = this.x - planetList[i].x;
             const deltaY = this.y - planetList[i].y;
             const angle = Math.abs(Math.atan(deltaY / deltaX));
             const r = Math.sqrt(Math.pow(deltaX, 2) + Math.pow(deltaY, 2));
             const force = G * planetList[i].mass / r;
         
-            this.ax = -Math.sign(deltaX) * force * Math.cos(angle);   
-            this.ay = -Math.sign(deltaY) * force * Math.sin(angle);
+            this.ax += -Math.sign(deltaX) * force * Math.cos(angle);   
+            this.ay += -Math.sign(deltaY) * force * Math.sin(angle);
             this.dx += this.ax;
             this.dy += this.ay;
             this.x += this.dx;
