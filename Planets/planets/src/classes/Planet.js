@@ -1,5 +1,5 @@
 export default class Planet {
-    constructor(x, y, dx, dy, mass, id) {
+    constructor(x, y, dx, dy, mass, id, freeze) {
         this.x = x;
         this.y = y;
         this.dx = dx;
@@ -9,12 +9,22 @@ export default class Planet {
         this.mass = mass;
         this.radius = 3; // make some function of mass
         this.id = id;
+        this.freeze = freeze;
+        this.trail = [];
+        this.trailPos = 0;
+        this.flipper = true;
     }
 
     moveTowards(planetList, G) {
         // reset
         this.ax = 0;
         this.ay = 0;
+
+        if (this.freeze) {
+            this.dx = 0;
+            this.dy = 0;
+            return;
+        }
 
         for (let i=0; i < planetList.length; i++) {
             if (this.id == planetList[i].id) {
@@ -34,19 +44,34 @@ export default class Planet {
             this.x += this.dx;
             this.y += this.dy;
         }
+
+        this.flipHelper();        
+
         if (this.checkDestroy(planetList)) {
             this.radius = 0;
             this.mass = 0;
             this.x = 0;
             this.y = 0;
         }
-        
+
+        if (this.trailPos == 500) {
+            this.trailPos = 0;
+        }
+
     } 
 
     checkDestroy(planetList) {
         for (let i = 0; i < planetList.length; i++) {
             return ((this.x == planetList[i].x && this.y == planetList[i].y) && this.id != planetList[i].id);
         }
+    }
+
+    flipHelper() {
+        if (this.flipper == true) {
+            this.trail[this.trailPos] = [this.x, this.y];
+            this.trailPos++;
+        }
+        this.flipper ^= true; // toggle
     }
 }
 

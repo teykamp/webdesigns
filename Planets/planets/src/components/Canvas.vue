@@ -28,9 +28,10 @@ export default {
         createPoints(num) {
             // will evenually be called on mouse click and will handle sizes (mouse hold or scroll)
             for (let i=0; i < num; i++) {
-                this.planetList.push(new Planet(this.randomNumber(50, this.width-50), this.randomNumber(50, this.height-50), this.randomNumber(-5, 5), this.randomNumber(-5, 5), 10, this.id));
-                // this.planetList.push(new Planet(this.width/2, 400, .5, 0, 1000, this.id));
-                // this.planetList.push(new Planet(this.width/2, 300, -.5, 0, 1000, this.id +1));
+                // this.planetList.push(new Planet(this.randomNumber(50, this.width-50), this.randomNumber(50, this.height-50), this.randomNumber(-5, 5), this.randomNumber(-5, 5), 10, this.id, false));
+                this.planetList.push(new Planet(this.width/2, 400, .5, 0, 3000, this.id));
+                this.planetList.push(new Planet(this.width/2, 800, -.1, 0, 1000, this.id +1));
+                this.planetList.push(new Planet(this.width/2, 600, -.5, 0, 500, this.id +1));
                 this.id++;
             }
         },
@@ -63,6 +64,11 @@ export default {
                 this.ctx.fillStyle = "black";
                 this.ctx.fill();
                 this.drawVector(this.planetList[i]);
+                for (let j=0; j<this.planetList[i].trail.length; j++) {
+                    this.ctx.beginPath();
+                    this.ctx.arc(this.planetList[i].trail[j][0], this.planetList[i].trail[j][1], this.planetList[i].radius / 2, 0, Math.PI * 2, false);
+                    this.ctx.fill();
+                }
             }
         },
 
@@ -73,8 +79,8 @@ export default {
             this.height = canvas.height;
             canvas.width = innerWidth-50;
             this.width = canvas.width;
-            this.planetList.push(new Planet(this.width/2, this.height/2, 0, 0, 10000, 0)); // sun
-            this.createPoints(2); 
+            // this.planetList.push(new Planet(this.width/2, this.height/2, 0, 0, 10000, 0, false)); // sun
+            this.createPoints(1); 
 
             setInterval(this.draw, 10);
         },
