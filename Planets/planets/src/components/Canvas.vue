@@ -55,6 +55,16 @@ export default {
             this.ctx.lineTo(planet.x + planet.dx/vMagnitude * 50, planet.y + planet.dy/vMagnitude * 50);
             this.ctx.stroke();
         },
+        
+        drawLabel(planet) {
+            this.ctx.font = "10px Arial";
+            if (planet.mass > 5000) {
+                this.ctx.fillText("Sun " + planet.id, planet.x + planet.radius + 5, planet.y + planet.radius);
+            }
+            else {
+                this.ctx.fillText("Planet " + planet.id, planet.x + planet.radius + 5, planet.y + planet.radius);
+            }
+        },
 
         draw() { // TODO: colored dots per planet
             this.ctx.clearRect(0, 0, this.width, this.height)
@@ -72,6 +82,7 @@ export default {
                 this.ctx.fillStyle = "black";
                 this.ctx.fill();
                 this.drawVector(this.planetList[i]);
+                this.drawLabel(this.planetList[i]);
                 for (let j=0; j<this.planetList[i].trail.length; j++) {
                     this.ctx.beginPath();
                     this.ctx.arc(this.planetList[i].trail[j][0], this.planetList[i].trail[j][1], this.planetList[i].radius / 2, 0, Math.PI * 2, false);
