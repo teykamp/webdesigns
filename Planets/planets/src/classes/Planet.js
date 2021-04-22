@@ -1,5 +1,5 @@
 export default class Planet {
-    constructor(x, y, dx, dy, mass, id, freeze) {
+    constructor(x, y, dx, dy, mass, id, freeze, color) {
         this.x = x;
         this.y = y;
         this.dx = dx;
@@ -13,6 +13,7 @@ export default class Planet {
         this.trail = [];
         this.trailPos = 0;
         this.flipper = true;
+        this.color = color;
     }
 
     moveTowards(planetList, G) {
@@ -48,10 +49,8 @@ export default class Planet {
         this.flipHelper();        
 
         if (this.checkDestroy(planetList)) {
-            this.radius = 0;
-            this.mass = 0;
-            this.x = 0;
-            this.y = 0;
+            let i = planetList.indexOf(this);
+            planetList.splice(i, 1);
         }
 
         if (this.trailPos == 500) {
