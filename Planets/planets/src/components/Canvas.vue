@@ -5,6 +5,7 @@
 </template>
 
 <script>
+// https://stackoverflow.com/questions/3420975/html5-canvas-zooming
 import Planet from "../classes/Planet.js";
 
 export default {
@@ -28,10 +29,10 @@ export default {
         createPoints(num) {
             // will evenually be called on mouse click and will handle sizes (mouse hold or scroll)
             for (let i=0; i < num; i++) {
-                // this.planetList.push(new Planet(this.randomNumber(50, this.width-50), this.randomNumber(50, this.height-50), this.randomNumber(-5, 5), this.randomNumber(-5, 5), 10, this.id, false));
-                this.planetList.push(new Planet(this.width/2, 400, .5, 0, 3000, this.id));
-                this.planetList.push(new Planet(this.width/2, 800, -.1, 0, 1000, this.id +1));
-                this.planetList.push(new Planet(this.width/2, 600, -.5, 0, 500, this.id +1));
+                this.planetList.push(new Planet(this.randomNumber(50, this.width-50), this.randomNumber(50, this.height-50), this.randomNumber(-2, 2), this.randomNumber(-2, 2), 10, this.id, false));
+                // this.planetList.push(new Planet(this.width/2, 400, 0, 0, 1000, this.id));
+                // this.planetList.push(new Planet(this.width/2, 800, .1, 0, 1, this.id +1));
+                // this.planetList.push(new Planet(this.width/2, 600, .5, 0, 10, this.id +2));
                 this.id++;
             }
         },
@@ -58,6 +59,13 @@ export default {
         draw() { // TODO: colored dots per planet
             this.ctx.clearRect(0, 0, this.width, this.height)
             for (let i=0; i < this.planetList.length; i++) {
+                // for (let k=0; k < this.planetList.length; k++) {
+                //     this.ctx.strokeStyle = "black";
+                //     this.ctx.beginPath();
+                //     this.ctx.moveTo(this.planetList[i].x, this.planetList[i].y);
+                //     this.ctx.lineTo(this.planetList[k].x, this.planetList[k].y);
+                //     this.ctx.stroke();
+                // }
                 this.planetList[i].moveTowards(this.planetList, this.G);
                 this.ctx.beginPath();
                 this.ctx.arc(this.planetList[i].x, this.planetList[i].y, this.planetList[i].radius, 0, Math.PI * 2, false);
@@ -79,7 +87,7 @@ export default {
             this.height = canvas.height;
             canvas.width = innerWidth-50;
             this.width = canvas.width;
-            // this.planetList.push(new Planet(this.width/2, this.height/2, 0, 0, 10000, 0, false)); // sun
+            this.planetList.push(new Planet(this.width/2, this.height/2, 0, 0, 10000, 0, false)); // sun
             this.createPoints(1); 
 
             setInterval(this.draw, 10);

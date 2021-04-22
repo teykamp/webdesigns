@@ -30,7 +30,7 @@ export default class Planet {
             if (this.id == planetList[i].id) {
                 continue;
             }
-
+            
             const deltaX = this.x - planetList[i].x;
             const deltaY = this.y - planetList[i].y;
             const angle = Math.abs(Math.atan(deltaY / deltaX));
