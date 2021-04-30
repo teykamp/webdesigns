@@ -42,15 +42,24 @@ export default class Planet {
             this.ay += -Math.sign(deltaY) * force * Math.sin(angle);
             this.dx += this.ax;
             this.dy += this.ay;
-            this.x += this.dx;
-            this.y += this.dy;
+            // to keep thinkgs from flying super fast devide by # of planets
+            this.x += this.dx / planetList.length;
+            this.y += this.dy / planetList.length;
         }
 
         this.flipHelper();        
 
         if (this.checkDestroy(planetList)) {
-            let i = planetList.indexOf(this);
-            planetList.splice(i, 1);
+            // let i = planetList.indexOf(this);
+            // planetList.splice(i, 1);
+            // cannot remove from list above because it stops movement and removes trail instantly
+            this.mass = 0;
+            this.x = -50;
+            this.y = -50;
+            this.freeze = true;
+            this.id = -1;
+
+            // TODO add collision mass changes & effects
         }
 
         if (this.trailPos == 500) {
@@ -61,7 +70,7 @@ export default class Planet {
 
     checkDestroy(planetList) {
         for (let i = 0; i < planetList.length; i++) {
-            return ((this.x == planetList[i].x && this.y == planetList[i].y) && this.id != planetList[i].id);
+            return (Math.pow(this.x - planetList[i].x, 2) + Math.pow(this.y - planetList[i].y, 2) < 250 && this.id != planetList[i].id);
         }
     }
 

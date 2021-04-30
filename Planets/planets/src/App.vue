@@ -16,6 +16,7 @@ export default {
 </script>
 
 <style>
+/* canvas color */
 body {
   background: rgb(22, 22, 22);
 }
