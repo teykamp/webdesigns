@@ -30,7 +30,7 @@
             footer
             and freeze sun
             and description
-            <button id="freezer" on-click="sunFreeze()">FREEZE SUN</button>
+            <button id="freezer" v-on:click="$emit('freeze-sun'); freezeToggle()">{{freezeText}}</button>
         </footer>
     </div>
 </template>
@@ -38,20 +38,22 @@
 <script>
 
 export default {
-    name: 'List',
+    name: "List",
 
-    props: ['planetList'],
+    props: ["planetList"],
 
     data() {
         return {
+            freezeText: "Freeze Sun"
             
         }
     },
-
+    // https://vuejs.org/v2/guide/components.html#data-Must-Be-a-Function
+    // https://masteringjs.io/tutorials/vue/emit
     methods: {
-        sunFreeze() {
-            this.planetList[0].freeze = true;
-        }
+        freezeToggle() {
+            this.freezeText = this.freezeText == 'Freeze Sun' ? 'Unfreeze Sun' : 'Freeze Sun';
+        },
     }
 }
 </script>

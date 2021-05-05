@@ -14,6 +14,7 @@ export default class Planet {
         this.trailPos = 0;
         this.flipper = true;
         this.color = color;
+        this.maxID = this.id;
     }
 
     moveTowards(planetList, G) {
@@ -42,9 +43,9 @@ export default class Planet {
             this.ay += -Math.sign(deltaY) * force * Math.sin(angle);
             this.dx += this.ax;
             this.dy += this.ay;
-            // to keep thinkgs from flying super fast devide by # of planets
-            this.x += this.dx / planetList.length;
-            this.y += this.dy / planetList.length;
+            // to keep things from flying super fast devide by # of planets
+            this.x += this.dx / this.maxID;
+            this.y += this.dy / this.maxID;
         }
 
         this.flipHelper();        
@@ -79,7 +80,7 @@ export default class Planet {
             this.trail[this.trailPos] = [this.x, this.y];
             this.trailPos++;
         }
-        this.flipper ^= true; // toggle
+        this.flipper = !this.flipper; // toggle
     }
 }
 

@@ -2,7 +2,7 @@
     <div>
         <div id="align">
             <div id="list">
-                <List v-bind:planetList='planetList'/>
+                <List v-bind:planetList='planetList' v-on:freeze-sun="freezeSun()"/>
             </div>
             <canvas id="canvas" v-on:click="createPoints(1)"/>
         </div>
@@ -25,9 +25,11 @@ export default {
             width: 0,
             planetList: [],
             size: 500,
-            id: 1,
+            id: 2,
             G: 0.002,
-            colors: ["red", "green", "blue", "orange", "yellow", "purple", "white"]
+            colors: ["red", "green", "blue", "orange", "yellow", "purple", "white"],
+            sunMass: 5000,
+            sunID: 1,
         }
     },
 
@@ -51,7 +53,7 @@ export default {
 
         drawVector(planet) {
             // not for sun
-            if (planet.id == 0) {
+            if (planet.id == this.sunID) {
                 return;
             }
             const aMagnitude = Math.sqrt(Math.pow(planet.ax, 2) + Math.pow(planet.ay, 2));
@@ -71,7 +73,7 @@ export default {
         drawLabel(planet) {
             this.ctx.fillStyle = "white";
             this.ctx.font = "10px Arial";
-            if (planet.mass > 5000) {
+            if (planet.mass > this.sunMass) {
                 this.ctx.fillText("Sun " + planet.id, planet.x + planet.radius + 5, planet.y + planet.radius);
             }
             else {
@@ -80,6 +82,15 @@ export default {
             
             this.ctx.fillText("Mass: " + planet.mass, planet.x + planet.radius + 5, planet.y + planet.radius + 15);
 
+        },
+
+        freezeSun() {
+            console.log("success");
+            for (let i=0; i < this.planetList.length; i++) {
+                if (this.planetList[i].mass > this.sunMass) {
+                    this.planetList[i].freeze = !this.planetList[i].freeze;
+                }
+            }
         },
 
         draw() { // TODO: colored dots per planet
@@ -92,6 +103,7 @@ export default {
                 //     this.ctx.lineTo(this.planetList[k].x, this.planetList[k].y);
                 //     this.ctx.stroke();
                 // }
+                this.planetList[i].maxID = this.id;
                 this.planetList[i].moveTowards(this.planetList, this.G);
                 this.ctx.beginPath();
                 this.ctx.arc(this.planetList[i].x, this.planetList[i].y, this.planetList[i].radius, 0, Math.PI * 2, false);
@@ -105,8 +117,6 @@ export default {
                     this.ctx.arc(this.planetList[i].trail[j][0], this.planetList[i].trail[j][1], this.planetList[i].radius / 2, 0, Math.PI * 2, false);
                     this.ctx.fill();
                 }
-
-                if (this.planetList.length > 1) { console.log(this.planetList[1].dx); }
             }
         },
 
@@ -118,7 +128,7 @@ export default {
             canvas.width = innerWidth-10;
             this.width = canvas.width;
             // sun
-            this.planetList.push(new Planet(this.width/2, this.height/2, 0, 0, 10000, 0, false, "white")); 
+            this.planetList.push(new Planet(this.width/2, this.height/2, 0, 0, 10000, 1, false, "white")); 
             // this.createPoints(1); 
             
             setInterval(this.draw, 10);
