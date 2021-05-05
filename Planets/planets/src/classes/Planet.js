@@ -54,11 +54,7 @@ export default class Planet {
             // let i = planetList.indexOf(this);
             // planetList.splice(i, 1);
             // cannot remove from list above because it stops movement and removes trail instantly
-            this.mass = 0;
-            this.x = -50;
-            this.y = -50;
-            this.freeze = true;
-            this.id = -1;
+            this.destroy();
 
             // TODO add collision mass changes & effects
         }
@@ -71,7 +67,7 @@ export default class Planet {
 
     checkDestroy(planetList) {
         for (let i = 0; i < planetList.length; i++) {
-            return (Math.pow(this.x - planetList[i].x, 2) + Math.pow(this.y - planetList[i].y, 2) < 250 && this.id != planetList[i].id);
+            return (Math.pow(this.x - planetList[i].x, 2) + Math.pow(this.y - planetList[i].y, 2) < 200 && this.id != planetList[i].id);
         }
     }
 
@@ -81,6 +77,15 @@ export default class Planet {
             this.trailPos++;
         }
         this.flipper = !this.flipper; // toggle
+    }
+
+    destroy() {
+        this.mass = 0;
+        this.x = -50;
+        this.y = -50;
+        this.freeze = true;
+        this.id = -1;
+        this.trail = [];
     }
 }
 

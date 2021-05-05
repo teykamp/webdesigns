@@ -2,7 +2,7 @@
     <div>
         <div id="align">
             <div id="list">
-                <List v-bind:planetList='planetList' v-on:freeze-sun="freezeSun()"/>
+                <List v-bind:planetList='planetList' v-on:emitter="emitHelper($event)"/>
             </div>
             <canvas id="canvas" v-on:click="createPoints(1)"/>
         </div>
@@ -81,6 +81,27 @@ export default {
             }
             
             this.ctx.fillText("Mass: " + planet.mass, planet.x + planet.radius + 5, planet.y + planet.radius + 15);
+
+        },
+
+        emitHelper(data) {
+
+            switch(data[0]) {
+                case 1:
+                    this.freezeSun();
+                    break;
+                case 2:
+                    for (let i=0; i <  this.planetList.length; i++) {
+                        if (this.planetList[i].id == data[1]) {
+                            this.planetList[i].destroy();
+                        }
+                    }
+                    break;
+
+                default:
+                    console.log("wrong code emitted: " + data[0]);
+            }
+
 
         },
 

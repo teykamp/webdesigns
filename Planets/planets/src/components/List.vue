@@ -7,7 +7,7 @@
                         <div v-if="planet.id != -1">
                             <div v-if="planet.mass > 5000">
                                 <div id="button">
-                                    <button>
+                                    <button v-on:click="$emit('emitter', [2, planet.id])">
                                     {{"Sun: " + planet.id}}
                                     {{"Mass: " + planet.mass}}
                                     </button>
@@ -15,7 +15,7 @@
                             </div>
                             <div v-else>
                                 <div id="button">
-                                    <button>
+                                    <button v-on:click="$emit('emitter', [2, planet.id])">
                                     {{"Planet: " + planet.id}}
                                     {{"Mass: " + planet.mass}}
                                     </button>
@@ -30,7 +30,7 @@
             footer
             and freeze sun
             and description
-            <button id="freezer" v-on:click="$emit('freeze-sun'); freezeToggle()">{{freezeText}}</button>
+            <button id="freezer" v-on:click="$emit('emitter', [1]); freezeToggle()">{{freezeText}}</button>
         </footer>
     </div>
 </template>
