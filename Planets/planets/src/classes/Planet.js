@@ -32,6 +32,10 @@ export default class Planet {
             if (this.id == planetList[i].id) {
                 continue;
             }
+
+            if (planetList[i].id == -1) {
+                continue;
+            }
             
             const deltaX = this.x - planetList[i].x;
             const deltaY = this.y - planetList[i].y;

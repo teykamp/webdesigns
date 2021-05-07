@@ -41,12 +41,11 @@
 <script>
 /*
  * TODO: 
- * - add planet mass input field
- * - add planet card (freeze, mass, delete buttons)
- * - add $emit for planet cards
+ * - Recenter/scale
  * - fix footer
  * - make prettier
  * - add collision effects (and maybe mass combine?)
+ * - drawvector option
  */
 
 export default {
