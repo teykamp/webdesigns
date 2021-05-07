@@ -1,6 +1,6 @@
 <template>
     <div>
-        <p>{{drawSling}}</p>
+        <!-- <p>{{drawSling}}</p> -->
         <div id="align">
             <div id="list">
                 <List v-bind:planetList='planetList' v-on:emitter="emitHelper($event)"/>
@@ -30,6 +30,7 @@ export default {
             G: 0.002,
             colors: ["red", "green", "blue", "orange", "yellow", "purple", "white"],
             sunMass: 5000,
+            moonMass: 500,
             sunID: 1,
             x1: 0,
             y1: 0,
@@ -54,7 +55,7 @@ export default {
             const xdif = (this.x1 - x2) / 10;
             const ydif = (this.y1 - y2) / 10;
 
-            this.createPlanet(this.x1, this.y1, xdif, ydif, Math.floor(this.randomNumber(10, 1000)))
+            this.createPlanet(this.x1, this.y1, xdif, ydif, Math.floor(this.randomNumber(10, 1500)))
             this.drawSling = false;
         },
         
@@ -102,6 +103,11 @@ export default {
             if (planet.mass > this.sunMass) {
                 this.ctx.fillText("Sun " + planet.id, planet.x + planet.radius + 5, planet.y + planet.radius);
             }
+
+            else if (planet.mass < this.moonMass) {
+                this.ctx.fillText("Moon " + planet.id, planet.x + planet.radius + 5, planet.y + planet.radius);
+            }
+
             else {
                 this.ctx.fillText("Planet " + planet.id, planet.x + planet.radius + 5, planet.y + planet.radius);
             }
@@ -110,22 +116,26 @@ export default {
 
         },
 
-        emitHelper(data) {
+        emitHelper(emitted) {
 
-            switch(data[0]) {
-                case 1:
-                    this.freezeSun();
-                    break;
-                case 2:
+            switch(emitted[0]) {
+                case 2: // delete
                     for (let i=0; i <  this.planetList.length; i++) {
-                        if (this.planetList[i].id == data[1]) {
+                        if (this.planetList[i].id == emitted[1]) {
                             this.planetList[i].destroy();
+                        }
+                    }
+                    break;
+                case 3: // freeze
+                    for (let i=0; i <  this.planetList.length; i++) {
+                        if (this.planetList[i].id == emitted[1]) {
+                            this.planetList[i].freeze = !this.planetList[i].freeze;
                         }
                     }
                     break;
 
                 default:
-                    console.log("wrong code emitted: " + data[0]);
+                    console.log("wrong code emitted: " + emitted[0]);
             }
         },
 
@@ -164,9 +174,9 @@ export default {
                 }
             }
 
-            if (this.drawSling == false) {
-                this.drawSlingLine();
-            }
+            // if (this.drawSling == false) {
+            //     this.drawSlingLine();
+            // }
 
         },
 

@@ -5,20 +5,24 @@
                 <ul>
                     <div v-for="planet in planetList" :key="planet.id">
                         <div v-if="planet.id != -1">
-                            <div v-if="planet.mass > 5000">
-                                <div id="button">
-                                    <button v-on:click="$emit('emitter', [2, planet.id])">
-                                    {{"Sun: " + planet.id}}
-                                    {{"Mass: " + planet.mass}}
-                                    </button>
+                            <div class="card">
+                                <div class="title">
+                                    <div v-if="planet.mass > 5000">
+                                        <p>{{"Sun: " + planet.id}}</p> 
+                                    </div>
+                                    <div v-else-if="planet.mass < 500">
+                                        <p>{{"Moon: " + planet.id}}</p>
+                                    </div>
+                                    <div v-else>
+                                        <p>{{"Planet: " + planet.id}}</p>
+                                    </div>
                                 </div>
-                            </div>
-                            <div v-else>
-                                <div id="button">
-                                    <button v-on:click="$emit('emitter', [2, planet.id])">
-                                    {{"Planet: " + planet.id}}
-                                    {{"Mass: " + planet.mass}}
-                                    </button>
+                                <div class="functions">
+                                    <p>Mass:</p>
+                                    <input type="number" min="0" step="50" v-model="planet.mass"/><br>
+                                    <button class="delete" v-on:click="$emit('emitter', [2, planet.id])">Delete</button>
+                                    <!-- 2 = delete, 3 = freeze -->
+                                    <button class="freeze" v-on:click="$emit('emitter', [3, planet.id])"> {{freezeHelper(planet.freeze)}} </button>    
                                 </div>
                             </div>
                         </div>
@@ -30,7 +34,6 @@
             footer
             and freeze sun
             and description
-            <button id="freezer" v-on:click="$emit('emitter', [1]); freezeToggle()">{{freezeText}}</button>
         </footer>
     </div>
 </template>
@@ -48,20 +51,24 @@
 
 export default {
     name: "List",
+    components: {
 
+    },
     props: ["planetList"],
 
     data() {
         return {
-            freezeText: "Freeze Sun"
-            
+            freezeText: "Freeze Sun"  
         }
     },
     // https://vuejs.org/v2/guide/components.html#data-Must-Be-a-Function
     // https://masteringjs.io/tutorials/vue/emit
     methods: {
-        freezeToggle() {
-            this.freezeText = this.freezeText == 'Freeze Sun' ? 'Unfreeze Sun' : 'Freeze Sun';
+        freezeHelper(freezeType) {
+            if (freezeType) {
+                return "Unfreeze";
+            }
+            return "Freeze";
         },
     }
 }
@@ -70,7 +77,7 @@ export default {
 <style scoped>
 
 button {
-    width: 100%;
+    width: 6em;
     height: 4em;
 }
 
@@ -78,7 +85,7 @@ nav ul {
     padding-top: 1rem;
     padding-right: 2rem;
     float: center;
-    max-height: 400px; 
+    max-height: 600px; 
     width: 10em;
     overflow: hidden;
     overflow-y: scroll;
@@ -102,4 +109,24 @@ footer {
     background: rgb(22, 22, 22);
     height: 95vh;
 }
+
+.card {
+    background: rgb(36, 36, 36);
+    color: lightslategray;
+    width: 200px;
+    margin-left: -38px;
+    border: solid 1px pink;
+    padding-bottom: 5px;
+    margin-bottom: 5px;
+}
+.title {
+    text-align: center;
+    font-weight: bold;
+}
+
+.functions {
+    margin-left: 20px;
+
+}
+
 </style>
