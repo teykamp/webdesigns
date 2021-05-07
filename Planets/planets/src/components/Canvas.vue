@@ -1,6 +1,6 @@
 <template>
     <div>
-        <!-- <p>{{drawSling}}</p> -->
+        <p>{{drawSling}}</p>
         <div id="align">
             <div id="list">
                 <List v-bind:planetList='planetList' v-on:emitter="emitHelper($event)"/>
@@ -56,9 +56,6 @@ export default {
 
             this.createPlanet(this.x1, this.y1, xdif, ydif, Math.floor(this.randomNumber(10, 1000)))
             this.drawSling = false;
-            this.x1 = 0;
-            this.y1 = 0;
-            
         },
         
         createPlanet(x, y, xvel, yvel, mass) {
@@ -69,16 +66,16 @@ export default {
             this.id++;
         },
 
-        // drawSlingLine() {
-        //     document.addEventListener('mousemove', (event) => {
-        //         this.ctx.strokeStyle = "white";
-        //         this.ctx.beginPath();
-        //         this.ctx.moveTo(this.x1, this.y1);
-        //         this.ctx.lineTo(event.clientX, event.clientY);
-        //         this.ctx.stroke();
-        //     });
+        drawSlingLine() {
+            document.addEventListener('mousemove', (event) => {
+                this.ctx.strokeStyle = "white";
+                this.ctx.beginPath();
+                this.ctx.moveTo(this.x1, this.y1);
+                this.ctx.lineTo(event.clientX, event.clientY);
+                this.ctx.stroke();
+            });
             
-        // },
+        },
 
         drawVector(planet) {
             // not for sun
@@ -158,10 +155,7 @@ export default {
                 this.ctx.fill();
                 this.drawVector(this.planetList[i]);
                 this.drawLabel(this.planetList[i]);
-                // if (this.drawSling) {
-                //     this.drawSlingLine();
-                // }
-
+               
                 for (let j=0; j<this.planetList[i].trail.length; j++) {
                     this.ctx.fillStyle = this.planetList[i].color;
                     this.ctx.beginPath();
@@ -169,6 +163,11 @@ export default {
                     this.ctx.fill();
                 }
             }
+
+            if (this.drawSling == false) {
+                this.drawSlingLine();
+            }
+
         },
 
         init() {
