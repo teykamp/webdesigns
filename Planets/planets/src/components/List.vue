@@ -36,6 +36,15 @@
 </template>
 
 <script>
+/*
+ * TODO: 
+ * - add planet mass input field
+ * - add planet card (freeze, mass, delete buttons)
+ * - add $emit for planet cards
+ * - fix footer
+ * - make prettier
+ * - add collision effects (and maybe mass combine?)
+ */
 
 export default {
     name: "List",

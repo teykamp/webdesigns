@@ -44,8 +44,8 @@ export default class Planet {
             this.dx += this.ax;
             this.dy += this.ay;
             // to keep things from flying super fast devide by # of planets
-            this.x += this.dx / Math.pow(this.maxID, 1.5);
-            this.y += this.dy / Math.pow(this.maxID, 1.5);
+            this.x += this.dx / Math.pow(this.maxID, 1.7);
+            this.y += this.dy / Math.pow(this.maxID, 1.7);
         }
 
         this.flipHelper();        

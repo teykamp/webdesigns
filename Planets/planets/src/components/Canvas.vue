@@ -1,10 +1,11 @@
 <template>
     <div>
+        <!-- <p>{{drawSling}}</p> -->
         <div id="align">
             <div id="list">
                 <List v-bind:planetList='planetList' v-on:emitter="emitHelper($event)"/>
             </div>
-            <canvas id="canvas" v-on:click="createPoints(1)"/>
+            <canvas id="canvas" v-on:mousedown="mouseDown()" v-on:mouseup="mouseUp()"/>
         </div>
     </div>
 </template>
@@ -30,6 +31,9 @@ export default {
             colors: ["red", "green", "blue", "orange", "yellow", "purple", "white"],
             sunMass: 5000,
             sunID: 1,
+            x1: 0,
+            y1: 0,
+            drawSling: false,
         }
     },
 
@@ -37,19 +41,44 @@ export default {
         randomNumber(min, max) {  
             return Math.random() * (max - min) + min; 
         },
-        
-        createPoints(num) {
-            // will evenually be called on mouse click and will handle sizes (mouse hold or scroll)
-            for (let i=0; i < num; i++) {
-                let x = event.clientX;
-                let y = event.clientY;
-                this.planetList.push(new Planet(x, y, this.randomNumber(-2, 2), this.randomNumber(-2, 2), Math.floor(this.randomNumber(10, 1000)), this.id, false, this.colors[Math.floor(Math.random() * this.colors.length)]));
-                // this.planetList.push(new Planet(this.width/2, 400, 0, 0, 1000, this.id));
-                // this.planetList.push(new Planet(this.width/2, 800, .1, 0, 1, this.id +1));
-                // this.planetList.push(new Planet(this.width/2, 600, .5, 0, 10, this.id +2));
-                this.id++;
-            }
+
+        mouseDown() {
+            this.x1 = event.clientX;
+            this.y1 = event.clientY;
+            this.drawSling = true;
         },
+
+        mouseUp() {
+            const x2 = event.clientX;
+            const y2 = event.clientY;
+            const xdif = (this.x1 - x2) / 10;
+            const ydif = (this.y1 - y2) / 10;
+
+            this.createPlanet(this.x1, this.y1, xdif, ydif, Math.floor(this.randomNumber(10, 1000)))
+            this.drawSling = false;
+            this.x1 = 0;
+            this.y1 = 0;
+            
+        },
+        
+        createPlanet(x, y, xvel, yvel, mass) {
+            this.planetList.push(new Planet(x, y, xvel, yvel, mass, this.id, false, this.colors[Math.floor(Math.random() * this.colors.length)]));
+            // this.planetList.push(new Planet(this.width/2, 400, 0, 0, 1000, this.id));
+            // this.planetList.push(new Planet(this.width/2, 800, .1, 0, 1, this.id +1));
+            // this.planetList.push(new Planet(this.width/2, 600, .5, 0, 10, this.id +2));
+            this.id++;
+        },
+
+        // drawSlingLine() {
+        //     document.addEventListener('mousemove', (event) => {
+        //         this.ctx.strokeStyle = "white";
+        //         this.ctx.beginPath();
+        //         this.ctx.moveTo(this.x1, this.y1);
+        //         this.ctx.lineTo(event.clientX, event.clientY);
+        //         this.ctx.stroke();
+        //     });
+            
+        // },
 
         drawVector(planet) {
             // not for sun
@@ -101,12 +130,9 @@ export default {
                 default:
                     console.log("wrong code emitted: " + data[0]);
             }
-
-
         },
 
         freezeSun() {
-            console.log("success");
             for (let i=0; i < this.planetList.length; i++) {
                 if (this.planetList[i].mass > this.sunMass) {
                     this.planetList[i].freeze = !this.planetList[i].freeze;
@@ -114,7 +140,7 @@ export default {
             }
         },
 
-        draw() { // TODO: colored dots per planet
+        draw() {
             this.ctx.clearRect(0, 0, this.width, this.height)
             for (let i=0; i < this.planetList.length; i++) {
                 // for (let k=0; k < this.planetList.length; k++) {
@@ -132,6 +158,10 @@ export default {
                 this.ctx.fill();
                 this.drawVector(this.planetList[i]);
                 this.drawLabel(this.planetList[i]);
+                // if (this.drawSling) {
+                //     this.drawSlingLine();
+                // }
+
                 for (let j=0; j<this.planetList[i].trail.length; j++) {
                     this.ctx.fillStyle = this.planetList[i].color;
                     this.ctx.beginPath();
@@ -150,8 +180,6 @@ export default {
             this.width = canvas.width;
             // sun
             this.planetList.push(new Planet(this.width/2, this.height/2, 0, 0, 10000, 1, false, "white")); 
-            // this.createPoints(1); 
-            
             setInterval(this.draw, 10);
         },
 
