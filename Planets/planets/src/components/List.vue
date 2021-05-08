@@ -31,9 +31,9 @@
             </nav>
         </div>
         <footer>
-            footer
-            and freeze sun
-            and description
+            <p>This is a fun webapp to simulate orbits. Drag to shoot a planet!</p>
+            <button class="reset" v-on:click="$emit('emitter', [4])">Reset</button>
+            <button class="recenter" v-on:click="$emit('emitter', [5])">Recenter</button>
         </footer>
     </div>
 </template>
@@ -41,11 +41,13 @@
 <script>
 /*
  * TODO: 
- * - Recenter/scale
+ * - scale
  * - fix footer
  * - make prettier
  * - add collision effects (and maybe mass combine?)
- * - drawvector option
+ * - draw-vector option
+ * - NOTE: Fix -> planets stop moving when delete all but last planet
+ * 
  */
 
 export default {
@@ -75,9 +77,13 @@ export default {
 
 <style scoped>
 
+input {
+    width: 152px;
+}
+
 button {
     width: 6em;
-    height: 4em;
+    height: 3em;
 }
 
 nav ul {
@@ -94,7 +100,7 @@ footer {
     position: absolute;
     bottom: 0;
     padding-left: 10px;
-    color: aquamarine;
+    color: white;
 }
 
 #freezer {
@@ -125,7 +131,11 @@ footer {
 
 .functions {
     margin-left: 20px;
+}
 
+.reset {
+    text-align: center;
+    background-color: pink;
 }
 
 </style>

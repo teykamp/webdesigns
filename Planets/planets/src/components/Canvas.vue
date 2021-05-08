@@ -133,6 +133,36 @@ export default {
                         }
                     }
                     break;
+                case 4: // reset
+                    this.planetList = [];
+                    // sun
+                    this.planetList.push(new Planet(this.width / 2, this.height / 2, 0, 0, 10000, 1, false, "white"));
+                    this.id = 2;
+                    break;
+                case 5: // recenter
+                    if (this.planetList.length == 0) {
+                        break;
+                    }
+                    let mostMassive;
+                    for (let i=0; i <  this.planetList.length; i++) {
+                        if (!mostMassive) {
+                            mostMassive = this.planetList[i];
+                        }
+                        else if (this.planetList[i].mass > mostMassive.mass) {
+                            mostMassive = this.planetList[i];
+                        }
+                    }
+                    const xOffset = this.width/2 - mostMassive.x;
+                    const yOffset = this.height/2 - mostMassive.y; 
+                    for (let i=0; i <  this.planetList.length; i++) {
+                        if (this.planetList[i].id != -1) {
+                            this.planetList[i].x += xOffset;
+                            this.planetList[i].y += yOffset;
+                            this.planetList[i].trail = [];
+                            this.planetList[i].trailPos = 0;
+                        }
+                    }
+                    break;
 
                 default:
                     console.log("wrong code emitted: " + emitted[0]);
