@@ -1,24 +1,18 @@
 # Planets
 
-## Project setup
+### Features to Implement:
 ```
-npm install
-```
-
-### Compiles and hot-reloads for development
-```
-npm run serve
-```
-
-### Compiles and minifies for production
-```
-npm run build
+- add collision mass changes & effects
+- add planet radius based on mass
+- add scale as part of recenter
+- improve visuals
+- add remembered motion after freezing
 ```
 
-### Lints and fixes files
+### Bug Fixes:
 ```
-npm run lint
+- planet freezes when delete down to 1
+- after deleting sun, planets do not collide
+- fix sling drawing
+- fix grabity changing based on planets spawned
 ```
-
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
