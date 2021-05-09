@@ -9,7 +9,7 @@
 - add remembered motion after freezing
 ```
 
-### Bug Fixes:
+### Bugs to Fix:
 ```
 - planet freezes when delete down to 1
 - after deleting sun, planets do not collide
