@@ -32,6 +32,7 @@
         </div>
         <footer>
             <p>This is a fun webapp to simulate orbits. Drag to shoot a planet!</p>
+            <button class="vectors" v-on:click="$emit('emitter', [6])">Vector</button>
             <button class="reset" v-on:click="$emit('emitter', [4])">Reset</button>
             <button class="recenter" v-on:click="$emit('emitter', [5])">Recenter</button>
         </footer>
@@ -45,8 +46,7 @@
  * - fix footer
  * - make prettier
  * - add collision effects (and maybe mass combine?)
- * - draw-vector option
- * - NOTE: Fix -> planets stop moving when delete all but last planet
+ * - NOTE: Fix -> planets stop moving when delete all but last planet & fix no collisions without sun present
  * 
  */
 

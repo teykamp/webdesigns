@@ -35,6 +35,7 @@ export default {
             x1: 0,
             y1: 0,
             drawSling: false,
+            drawVec: false,
         }
     },
 
@@ -119,27 +120,30 @@ export default {
         emitHelper(emitted) {
 
             switch(emitted[0]) {
-                case 2: // delete
+                case 2: { // delete
                     for (let i=0; i <  this.planetList.length; i++) {
                         if (this.planetList[i].id == emitted[1]) {
                             this.planetList[i].destroy();
                         }
                     }
                     break;
-                case 3: // freeze
+                }
+                case 3: { // freeze
                     for (let i=0; i <  this.planetList.length; i++) {
                         if (this.planetList[i].id == emitted[1]) {
                             this.planetList[i].freeze = !this.planetList[i].freeze;
                         }
                     }
                     break;
-                case 4: // reset
+                }
+                case 4: { // reset
                     this.planetList = [];
                     // sun
                     this.planetList.push(new Planet(this.width / 2, this.height / 2, 0, 0, 10000, 1, false, "white"));
                     this.id = 2;
                     break;
-                case 5: // recenter
+                }
+                case 5: { // recenter
                     if (this.planetList.length == 0) {
                         break;
                     }
@@ -163,9 +167,15 @@ export default {
                         }
                     }
                     break;
+                }
+                case 6: { // vectors
+                    this.drawVec = !this.drawVec;
+                    break;
+                }
 
-                default:
+                default: {
                     console.log("wrong code emitted: " + emitted[0]);
+                }
             }
         },
 
@@ -193,7 +203,9 @@ export default {
                 this.ctx.arc(this.planetList[i].x, this.planetList[i].y, this.planetList[i].radius, 0, Math.PI * 2, false);
                 this.ctx.fillStyle = this.planetList[i].color;
                 this.ctx.fill();
-                this.drawVector(this.planetList[i]);
+                if (this.drawVec) {
+                    this.drawVector(this.planetList[i]);
+                }
                 this.drawLabel(this.planetList[i]);
                
                 for (let j=0; j<this.planetList[i].trail.length; j++) {
